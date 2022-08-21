@@ -1,9 +1,10 @@
-package com.scheduler.wgu_scheduler_app;
+package com.scheduler.wgu_scheduler_app.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.scheduler.wgu_scheduler_app.R;
 import com.scheduler.wgu_scheduler_app.ui.main.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
