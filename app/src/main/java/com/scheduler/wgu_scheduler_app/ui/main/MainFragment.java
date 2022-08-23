@@ -2,7 +2,6 @@ package com.scheduler.wgu_scheduler_app.ui.main;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,9 @@ import android.widget.Button;
 
 import com.scheduler.wgu_scheduler_app.R;
 import com.scheduler.wgu_scheduler_app.ui.activities.AssessmentActivity;
-import com.scheduler.wgu_scheduler_app.ui.activities.MainActivity;
+import com.scheduler.wgu_scheduler_app.ui.activities.CourseActivity;
+import com.scheduler.wgu_scheduler_app.ui.activities.TermActivity;
+import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
 
 public class MainFragment extends Fragment {
 
@@ -29,23 +30,15 @@ public class MainFragment extends Fragment {
     public void onStart() {
         super.onStart();
         courseListButton = getView().findViewById(R.id.button);
-        courseListButton.setOnClickListener(v -> {
-        });
+        courseListButton.setOnClickListener(v -> Utils.switchActivity(CourseActivity.class, getActivity()));
 
         assessmentListButton = getView().findViewById(R.id.button2);
-        assessmentListButton.setOnClickListener(v -> {
-            switchActivity(AssessmentActivity.class);
-        });
+        assessmentListButton.setOnClickListener(v -> Utils.switchActivity(AssessmentActivity.class, getActivity()));
 
         termListButton = getView().findViewById(R.id.button3);
         termListButton.setOnClickListener(v -> {
+            Utils.switchActivity(TermActivity.class, getActivity());
         });
-
-    }
-
-    private void switchActivity(Class cls){
-        Intent intent = new Intent(getActivity(), cls);
-        startActivity(intent);
     }
 
     public static MainFragment newInstance() {

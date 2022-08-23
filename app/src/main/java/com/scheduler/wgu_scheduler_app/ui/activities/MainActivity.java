@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.scheduler.wgu_scheduler_app.R;
 import com.scheduler.wgu_scheduler_app.ui.main.MainFragment;
+import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,9 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow();
+            Utils.switchFragment(this, R.id.container, MainFragment.newInstance());
         }
     }
 }
