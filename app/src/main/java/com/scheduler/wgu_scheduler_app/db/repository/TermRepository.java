@@ -51,7 +51,7 @@ public class TermRepository {
         repoExecutor.execute(() -> {
             try {
                 List<TermEntity> terms = termDao.getAll();
-                RepositoryShared.notifyResult(new Result.Success<List<TermEntity>>(terms), callback, resultHandler);
+                RepositoryShared.notifyResult(new Result.Success<>(terms), callback, resultHandler);
             }
             catch (Exception ex){
                 RepositoryShared.notifyResult(new Result.Error<>(ex), callback, resultHandler);
