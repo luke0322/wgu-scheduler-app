@@ -43,6 +43,7 @@ public class CourseDetailFragment extends Fragment {
     private EditText phoneNumbers;
     private EditText startDate;
     private EditText endDate;
+    private EditText optionalNote;
     private Spinner courseStatus;
     private Button deleteCourseButton;
     private Button saveCourseButton;
@@ -105,6 +106,8 @@ public class CourseDetailFragment extends Fragment {
             }
         });
 
+        optionalNote = getActivity().findViewById(R.id.editTextOptionalNote);
+
         courseStatus = getActivity().findViewById(R.id.spinner);
         String[] items = new String[] {"in progress", "completed", "dropped", "plan to take"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, items);
@@ -121,6 +124,11 @@ public class CourseDetailFragment extends Fragment {
                     phoneNumbers.setText(course.getCourseInstructorPhoneNumbers());
                     startDate.setText(course.getCourseStartDate());
                     endDate.setText(course.getCourseEndDate());
+
+                    if (Utils.isNotBlank(course.getCourseOptionalNote())){
+                        optionalNote.setText(course.getCourseOptionalNote());
+                    }
+
                     switch(course.getCourseStatus()){
                         case "in progress":
                         default:
@@ -162,6 +170,10 @@ public class CourseDetailFragment extends Fragment {
                         Utils.getEditTextToString(emailAddresses),
                         Utils.getEditTextToString(phoneNumbers));
 
+                if (Utils.isNotBlank(optionalNote.getText())){
+                    ce.setCourseOptionalNote(Utils.getEditTextToString(optionalNote));
+                }
+
                 ce.setCourseId(courseId);
 
                 mViewModel.delete(ce, getActivity().getApplication(), result -> {
@@ -196,6 +208,10 @@ public class CourseDetailFragment extends Fragment {
                         Utils.getEditTextToString(instructorNames),
                         Utils.getEditTextToString(emailAddresses),
                         Utils.getEditTextToString(phoneNumbers));
+
+                if (Utils.isNotBlank(optionalNote.getText())){
+                    ce.setCourseOptionalNote(Utils.getEditTextToString(optionalNote));
+                }
 
                 ce.setCourseId(courseId);
 

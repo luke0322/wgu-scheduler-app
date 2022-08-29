@@ -21,5 +21,7 @@ public class AssessmentActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher_foreground);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 }

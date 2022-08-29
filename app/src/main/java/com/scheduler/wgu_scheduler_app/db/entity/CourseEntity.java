@@ -24,6 +24,7 @@ public class CourseEntity {
     private String courseInstructorNames;
     private String courseInstructorEmailAddresses;
     private String courseInstructorPhoneNumbers;
+    private String courseOptionalNote;
 
     public CourseEntity(int termId, String courseTitle, String courseStartDate, String courseEndDate, String courseStatus, String courseInstructorNames,
             String courseInstructorEmailAddresses,
@@ -108,6 +109,14 @@ public class CourseEntity {
 
     public void setCourseInstructorPhoneNumbers(String courseInstructorPhoneNumbers) {
         this.courseInstructorPhoneNumbers = courseInstructorPhoneNumbers;
+    }
+
+    public String getCourseOptionalNote() {
+        return courseOptionalNote;
+    }
+
+    public void setCourseOptionalNote(String courseOptionalNote) {
+        this.courseOptionalNote = courseOptionalNote;
     }
 
     @Override

@@ -7,7 +7,6 @@ import com.scheduler.wgu_scheduler_app.db.DbBuilder;
 import com.scheduler.wgu_scheduler_app.db.Result;
 import com.scheduler.wgu_scheduler_app.db.dao.CourseDao;
 import com.scheduler.wgu_scheduler_app.db.entity.CourseEntity;
-import com.scheduler.wgu_scheduler_app.db.entity.TermEntity;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

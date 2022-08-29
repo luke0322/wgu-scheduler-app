@@ -21,22 +21,13 @@ import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
 
 public class MainFragment extends Fragment {
 
-    private MainViewModel mViewModel;
-    private Button courseListButton;
-    private Button assessmentListButton;
-    private Button termListButton;
+    private Button termButton;
 
     @Override
     public void onStart() {
         super.onStart();
-        courseListButton = getView().findViewById(R.id.button);
-        courseListButton.setOnClickListener(v -> Utils.switchActivity(CourseActivity.class, getActivity()));
-
-        assessmentListButton = getView().findViewById(R.id.button2);
-        assessmentListButton.setOnClickListener(v -> Utils.switchActivity(AssessmentActivity.class, getActivity()));
-
-        termListButton = getView().findViewById(R.id.button3);
-        termListButton.setOnClickListener(v -> {
+        termButton = getView().findViewById(R.id.button3);
+        termButton.setOnClickListener(v -> {
             Utils.switchActivity(TermActivity.class, getActivity());
         });
     }
@@ -55,8 +46,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

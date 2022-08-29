@@ -17,5 +17,9 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Utils.switchFragment(this, R.id.container, MainFragment.newInstance());
         }
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher_foreground);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 }
