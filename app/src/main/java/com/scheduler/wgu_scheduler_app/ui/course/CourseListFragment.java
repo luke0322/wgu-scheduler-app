@@ -41,6 +41,7 @@ public class CourseListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
         mViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
         mViewModel.getAllByTermId(Utils.CurrentTermId, getActivity().getApplication(), result -> {
             if (result instanceof Result.Success){
@@ -59,8 +60,6 @@ public class CourseListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            setHasOptionsMenu(true);
-            Intent i = getActivity().getIntent();
             Utils.switchFragment(getActivity(), R.id.container_course, CourseFragment.newInstance());
             return true;
         }

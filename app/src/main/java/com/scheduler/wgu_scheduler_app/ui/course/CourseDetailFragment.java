@@ -30,7 +30,9 @@ import com.scheduler.wgu_scheduler_app.ui.term.TermFragment;
 import com.scheduler.wgu_scheduler_app.ui.term.TermListFragment;
 import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
 
-public class CourseFragment extends Fragment {
+import java.util.List;
+
+public class CourseDetailFragment extends Fragment {
 
     private Handler handler = new Handler();
     private CourseViewModel mViewModel;
@@ -41,19 +43,24 @@ public class CourseFragment extends Fragment {
     private EditText startDate;
     private EditText endDate;
     private Spinner courseStatus;
+    private Button deleteCourseButton;
     private Button saveCourseButton;
-    private Button viewAllCoursesButton;
+
+    private int courseId;
+    private int termId;
 
 
-    public static com.scheduler.wgu_scheduler_app.ui.course.CourseFragment newInstance() {
-        return new com.scheduler.wgu_scheduler_app.ui.course.CourseFragment();
+    public static com.scheduler.wgu_scheduler_app.ui.course.CourseDetailFragment newInstance() {
+        return new com.scheduler.wgu_scheduler_app.ui.course.CourseDetailFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.course_fragment, container, false);
+        courseId = getArguments().getInt("courseId");
+        termId = getArguments().getInt("termId");
+        return inflater.inflate(R.layout.course_detail_fragment, container, false);
     }
 
     @Override
@@ -100,18 +107,51 @@ public class CourseFragment extends Fragment {
         String[] items = new String[] {"in progress", "completed", "dropped", "plan to take"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, items);
         courseStatus.setAdapter(adapter);
-        courseStatus.setSelection(0);
 
-        saveCourseButton = getActivity().findViewById(R.id.save_course_button);
-        saveCourseButton.setOnClickListener(l -> {
+        mViewModel.getCourseById(courseId, getActivity().getApplication(), result -> {
+            if (result instanceof Result.Success) {
+                CourseEntity course = (CourseEntity) ((Result.Success) result).data;
+
+                if (course != null){
+                    courseName.setText(course.getCourseTitle());
+                    instructorNames.setText(course.getCourseInstructorNames());
+                    emailAddresses.setText(course.getCourseInstructorEmailAddresses());
+                    phoneNumbers.setText(course.getCourseInstructorPhoneNumbers());
+                    startDate.setText(course.getCourseStartDate());
+                    endDate.setText(course.getCourseEndDate());
+                    switch(course.getCourseStatus()){
+                        case "in progress":
+                        default:
+                            courseStatus.setSelection(0, false);
+                            break;
+                        case "completed":
+                            courseStatus.setSelection(1, false);
+                            break;
+                        case "dropped":
+                            courseStatus.setSelection(2, false);
+                            break;
+                        case "plan to take":
+                            courseStatus.setSelection(3, false);
+                            break;
+                    }
+
+                }
+            }
+            else {
+                Toast.makeText(getContext(), "FAIL", Toast.LENGTH_SHORT).show();
+            }
+        }, handler);
+
+        deleteCourseButton = getActivity().findViewById(R.id.delete_course_button);
+        deleteCourseButton.setOnClickListener(l -> {
             if (Utils.isNotBlank(courseName.getText()) &&
-                Utils.isNotBlank(instructorNames.getText()) &&
-                Utils.isNotBlank(emailAddresses.getText()) &&
-                Utils.isNotBlank(phoneNumbers.getText()) &&
-                Utils.isNotBlank(startDate.getText()) &&
-                Utils.isNotBlank(endDate.getText())) {
+                    Utils.isNotBlank(instructorNames.getText()) &&
+                    Utils.isNotBlank(emailAddresses.getText()) &&
+                    Utils.isNotBlank(phoneNumbers.getText()) &&
+                    Utils.isNotBlank(startDate.getText()) &&
+                    Utils.isNotBlank(endDate.getText())) {
 
-                CourseEntity ce = new CourseEntity(Utils.CurrentTermId,
+                CourseEntity ce = new CourseEntity(termId,
                         Utils.getEditTextToString(courseName),
                         Utils.getEditTextToString(startDate),
                         Utils.getEditTextToString(endDate),
@@ -120,9 +160,47 @@ public class CourseFragment extends Fragment {
                         Utils.getEditTextToString(emailAddresses),
                         Utils.getEditTextToString(phoneNumbers));
 
-                mViewModel.insert(ce, getActivity().getApplication(), result -> {
+                ce.setCourseId(courseId);
+
+                mViewModel.delete(ce, getActivity().getApplication(), result -> {
                     if (result instanceof Result.Success){
                         Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                        Utils.switchFragment(getActivity(), R.id.container_course, CourseListFragment.newInstance());
+                    }
+                    else {
+                        Toast.makeText(getContext(), "FAIL", Toast.LENGTH_SHORT).show();
+                    }
+                }, handler);
+            }
+            else {
+                Toast.makeText(getContext(), "One of the fields was empty to delete!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        saveCourseButton = getActivity().findViewById(R.id.save_course_button);
+        saveCourseButton.setOnClickListener(l -> {
+            if (Utils.isNotBlank(courseName.getText()) &&
+                    Utils.isNotBlank(instructorNames.getText()) &&
+                    Utils.isNotBlank(emailAddresses.getText()) &&
+                    Utils.isNotBlank(phoneNumbers.getText()) &&
+                    Utils.isNotBlank(startDate.getText()) &&
+                    Utils.isNotBlank(endDate.getText())) {
+
+                CourseEntity ce = new CourseEntity(termId,
+                        Utils.getEditTextToString(courseName),
+                        Utils.getEditTextToString(startDate),
+                        Utils.getEditTextToString(endDate),
+                        courseStatus.getSelectedItem().toString(),
+                        Utils.getEditTextToString(instructorNames),
+                        Utils.getEditTextToString(emailAddresses),
+                        Utils.getEditTextToString(phoneNumbers));
+
+                ce.setCourseId(courseId);
+
+                mViewModel.update(ce, getActivity().getApplication(), result -> {
+                    if (result instanceof Result.Success){
+                        Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                        Utils.switchFragment(getActivity(), R.id.container_course, CourseListFragment.newInstance());
                     }
                     else {
                         Toast.makeText(getContext(), "FAIL", Toast.LENGTH_SHORT).show();
@@ -133,19 +211,16 @@ public class CourseFragment extends Fragment {
                 Toast.makeText(getContext(), "One of the fields was empty!", Toast.LENGTH_SHORT).show();
             }
         });
-        viewAllCoursesButton = getActivity().findViewById(R.id.view_all_courses_button);
-        viewAllCoursesButton.setOnClickListener(l -> {
-            Utils.switchFragment(getActivity(), R.id.container_course, CourseListFragment.newInstance());
-        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Utils.switchActivity(TermActivity.class, getActivity());
+            Utils.switchFragment(getActivity(), R.id.container_course, CourseListFragment.newInstance());
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 }
+

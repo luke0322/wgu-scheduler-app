@@ -34,7 +34,6 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
             itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 final TermEntity current = terms.get(position);
-                // TODO: SEND TO THE DETAIL SCREEN FOR EDITING CAPABILITY?
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", current.getTermId());
                 bundle.putString("title",current.getTermTitle());

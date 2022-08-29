@@ -21,12 +21,15 @@ import android.widget.Toast;
 
 import com.scheduler.wgu_scheduler_app.R;
 import com.scheduler.wgu_scheduler_app.db.Result;
+import com.scheduler.wgu_scheduler_app.db.entity.CourseEntity;
 import com.scheduler.wgu_scheduler_app.db.entity.TermEntity;
 import com.scheduler.wgu_scheduler_app.ui.activities.CourseActivity;
 import com.scheduler.wgu_scheduler_app.ui.activities.MainActivity;
 import com.scheduler.wgu_scheduler_app.ui.activities.TermActivity;
 import com.scheduler.wgu_scheduler_app.ui.main.MainFragment;
 import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
+
+import java.util.List;
 
 public class TermDetailFragment extends Fragment {
 
@@ -36,6 +39,7 @@ public class TermDetailFragment extends Fragment {
     private EditText startDate;
     private EditText endDate;
     private Button saveTermButton;
+    private Button deleteTermButton;
     private Button addCourseToTermButton;
 
     private int termId;
@@ -130,6 +134,24 @@ public class TermDetailFragment extends Fragment {
             }
         });
 
+        deleteTermButton = getActivity().findViewById(R.id.button5);
+        deleteTermButton.setOnClickListener(l -> {
+            mViewModel.getAssociatedCoursesByTermId(termId, getActivity().getApplication(), result -> {
+                if (result instanceof Result.Success){
+                    List<CourseEntity> courses = (List<CourseEntity>) ((Result.Success) result).data;
+                    if (courses.size() == 0) {
+                        deleteTerm();
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Cannot delete term, course(s) found!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    deleteTerm();
+                }
+            }, handler);
+        });
+
         addCourseToTermButton = getActivity().findViewById(R.id.button4);
         addCourseToTermButton.setOnClickListener(l -> {
             Utils.CurrentTermId = termId;
@@ -144,5 +166,21 @@ public class TermDetailFragment extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void deleteTerm(){
+        TermEntity te = new TermEntity(termName.getText().toString(),
+                startDate.getText().toString(),
+                endDate.getText().toString());
+
+        te.setTermId(termId);
+        mViewModel.delete(te, getActivity().getApplication(), resultDelete -> {
+            if (resultDelete instanceof Result.Success){
+                Utils.switchFragment(getActivity(), R.id.container_term, TermListFragment.newInstance());
+            }
+            else {
+                Toast.makeText(getContext(), "Failed to delete term", Toast.LENGTH_SHORT).show();
+            }
+        }, handler);
     }
 }

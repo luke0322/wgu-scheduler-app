@@ -18,6 +18,7 @@ import java.util.Calendar;
 public class Utils {
 
     public static int CurrentTermId = 0;
+    
     /**
      * Generic activity switcher.
      * @param cls the activity to start

@@ -17,6 +17,16 @@ public class CourseViewModel extends ViewModel {
         cr.insert(ce, cb, handler);
     }
 
+    public void update(CourseEntity ce, Application app, RepositoryCallback cb, Handler handler) {
+        checkRepo(app);
+        cr.update(ce, cb, handler);
+    }
+
+    public void delete(CourseEntity ce, Application app, RepositoryCallback cb, Handler handler) {
+        checkRepo(app);
+        cr.delete(ce, cb, handler);
+    }
+
     public void getAll(Application app, RepositoryCallback cb, Handler handler){
         checkRepo(app);
         cr.getAll(cb, handler);
@@ -24,6 +34,11 @@ public class CourseViewModel extends ViewModel {
     public void getAllByTermId(int termId, Application app, RepositoryCallback cb, Handler handler){
         checkRepo(app);
         cr.getAllByTermId(termId, cb, handler);
+    }
+
+    public void getCourseById(int courseId, Application app, RepositoryCallback cb, Handler handler){
+        checkRepo(app);
+        cr.getCourseById(courseId, cb, handler);
     }
 
 

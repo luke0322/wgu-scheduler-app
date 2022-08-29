@@ -1,6 +1,7 @@
 package com.scheduler.wgu_scheduler_app.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.scheduler.wgu_scheduler_app.R;
 import com.scheduler.wgu_scheduler_app.db.entity.CourseEntity;
+import com.scheduler.wgu_scheduler_app.db.entity.TermEntity;
+import com.scheduler.wgu_scheduler_app.ui.course.CourseDetailFragment;
+import com.scheduler.wgu_scheduler_app.ui.term.TermDetailFragment;
+import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
 
 import java.util.List;
 
@@ -27,7 +32,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             endDateItemView = itemView.findViewById(R.id.courseEndDate);
 
             itemView.setOnClickListener(view -> {
-
+                int position = getAdapterPosition();
+                final CourseEntity current = courses.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putInt("courseId", current.getCourseId());
+                bundle.putInt("termId", current.getTermId());
+                CourseDetailFragment cdf = CourseDetailFragment.newInstance();
+                cdf.setArguments(bundle);
+                Utils.switchFragment(fa, R.id.container_course, cdf);
             });
         }
     }

@@ -36,6 +36,31 @@ public class CourseRepository {
         });
     }
 
+    public void update(CourseEntity ce, final RepositoryCallback<Boolean> callback, final Handler resultHandler){
+        repoExecutor.execute(() -> {
+            try {
+                courseDao.update(ce);
+                RepositoryShared.notifyResult(new Result.Success<>(true), callback, resultHandler);
+            }
+            catch (Exception ex){
+                RepositoryShared.notifyResult(new Result.Error<>(ex), callback, resultHandler);
+            }
+        });
+    }
+
+    public void delete(CourseEntity ce, final RepositoryCallback<Boolean> callback, final Handler resultHandler){
+        repoExecutor.execute(() -> {
+            try {
+                courseDao.delete(ce);
+                RepositoryShared.notifyResult(new Result.Success<>(true), callback, resultHandler);
+            }
+            catch (Exception ex){
+                RepositoryShared.notifyResult(new Result.Error<>(ex), callback, resultHandler);
+            }
+        });
+    }
+
+
     public void getAll(final RepositoryCallback<List<CourseEntity>> callback, final Handler resultHandler){
         repoExecutor.execute(() -> {
             try {
@@ -53,6 +78,18 @@ public class CourseRepository {
             try {
                 List<CourseEntity> courses = courseDao.getAllByTermId(termId);
                 RepositoryShared.notifyResult(new Result.Success<>(courses), callback, resultHandler);
+            }
+            catch (Exception ex){
+                RepositoryShared.notifyResult(new Result.Error<>(ex), callback, resultHandler);
+            }
+        });
+    }
+
+    public void getCourseById(int courseId, final RepositoryCallback<CourseEntity> callback, final Handler resultHandler){
+        repoExecutor.execute(() -> {
+            try {
+                CourseEntity course = courseDao.getCourseById(courseId);
+                RepositoryShared.notifyResult(new Result.Success<>(course), callback, resultHandler);
             }
             catch (Exception ex){
                 RepositoryShared.notifyResult(new Result.Error<>(ex), callback, resultHandler);

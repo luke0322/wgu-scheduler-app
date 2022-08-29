@@ -58,4 +58,16 @@ public class TermRepository {
             }
         });
     }
+
+    public void delete(TermEntity te, final RepositoryCallback<Boolean> callback, final Handler resultHandler){
+        repoExecutor.execute(() -> {
+            try {
+                termDao.delete(te);
+                RepositoryShared.notifyResult(new Result.Success<>(true), callback, resultHandler);
+            }
+            catch (Exception ex){
+                RepositoryShared.notifyResult(new Result.Error<>(ex), callback, resultHandler);
+            }
+        });
+    }
 }
