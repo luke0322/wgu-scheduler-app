@@ -2,6 +2,7 @@ package com.scheduler.wgu_scheduler_app.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 

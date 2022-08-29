@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.scheduler.wgu_scheduler_app.R;
 import com.scheduler.wgu_scheduler_app.db.Result;
 import com.scheduler.wgu_scheduler_app.db.entity.TermEntity;
+import com.scheduler.wgu_scheduler_app.ui.activities.CourseActivity;
 import com.scheduler.wgu_scheduler_app.ui.activities.MainActivity;
 import com.scheduler.wgu_scheduler_app.ui.activities.TermActivity;
 import com.scheduler.wgu_scheduler_app.ui.main.MainFragment;
@@ -35,6 +36,7 @@ public class TermDetailFragment extends Fragment {
     private EditText startDate;
     private EditText endDate;
     private Button saveTermButton;
+    private Button addCourseToTermButton;
 
     private int termId;
     private String termNameInitialText;
@@ -105,9 +107,9 @@ public class TermDetailFragment extends Fragment {
 
         saveTermButton = getActivity().findViewById(R.id.save_term_button);
         saveTermButton.setOnClickListener(v -> {
-            if (termName.getText() != null &&
-                    startDate.getText() != null &&
-                    endDate.getText() != null) {
+            if (Utils.isNotBlank(termName.getText()) &&
+                Utils.isNotBlank(startDate.getText()) &&
+                Utils.isNotBlank(endDate.getText())) {
 
                 TermEntity te = new TermEntity(termName.getText().toString(),
                                                startDate.getText().toString(),
@@ -123,6 +125,15 @@ public class TermDetailFragment extends Fragment {
                     }
                 }, handler);
             }
+            else {
+                Toast.makeText(getContext(), "One of the fields was blank!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        addCourseToTermButton = getActivity().findViewById(R.id.button4);
+        addCourseToTermButton.setOnClickListener(l -> {
+            Utils.CurrentTermId = termId;
+            Utils.switchActivity(CourseActivity.class, getActivity());
         });
     }
 

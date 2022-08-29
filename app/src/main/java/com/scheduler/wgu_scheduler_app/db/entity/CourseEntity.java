@@ -1,12 +1,17 @@
 package com.scheduler.wgu_scheduler_app.db.entity;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 /**
  *
  */
-@Entity(tableName = "course_tbl")
+@Entity(tableName = "course_tbl",
+        foreignKeys = @ForeignKey(entity = TermEntity.class,
+                                  parentColumns = "termId",
+                                  childColumns = "termId",
+                                  onDelete = ForeignKey.CASCADE))
 public class CourseEntity {
     @PrimaryKey(autoGenerate = true)
     private int courseId;
@@ -16,14 +21,21 @@ public class CourseEntity {
     private String courseStartDate;
     private String courseEndDate;
     private String courseStatus;
+    private String courseInstructorNames;
+    private String courseInstructorEmailAddresses;
+    private String courseInstructorPhoneNumbers;
 
-    public CourseEntity(int courseId, int termId, String courseTitle, String courseStartDate, String courseEndDate, String courseStatus) {
-        this.courseId = courseId;
+    public CourseEntity(int termId, String courseTitle, String courseStartDate, String courseEndDate, String courseStatus, String courseInstructorNames,
+            String courseInstructorEmailAddresses,
+            String courseInstructorPhoneNumbers) {
         this.termId = termId;
         this.courseTitle = courseTitle;
         this.courseStartDate = courseStartDate;
         this.courseEndDate = courseEndDate;
         this.courseStatus = courseStatus;
+        this.courseInstructorNames = courseInstructorNames;
+        this.courseInstructorEmailAddresses = courseInstructorEmailAddresses;
+        this.courseInstructorPhoneNumbers = courseInstructorPhoneNumbers;
     }
 
     public int getCourseId() {
@@ -72,6 +84,30 @@ public class CourseEntity {
 
     public void setCourseStatus(String courseStatus) {
         this.courseStatus = courseStatus;
+    }
+
+    public String getCourseInstructorNames() {
+        return courseInstructorNames;
+    }
+
+    public void setCourseInstructorNames(String courseInstructorNames) {
+        this.courseInstructorNames = courseInstructorNames;
+    }
+
+    public String getCourseInstructorEmailAddresses() {
+        return courseInstructorEmailAddresses;
+    }
+
+    public void setCourseInstructorEmailAddresses(String courseInstructorEmailAddresses) {
+        this.courseInstructorEmailAddresses = courseInstructorEmailAddresses;
+    }
+
+    public String getCourseInstructorPhoneNumbers() {
+        return courseInstructorPhoneNumbers;
+    }
+
+    public void setCourseInstructorPhoneNumbers(String courseInstructorPhoneNumbers) {
+        this.courseInstructorPhoneNumbers = courseInstructorPhoneNumbers;
     }
 
     @Override

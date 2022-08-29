@@ -9,4 +9,5 @@
     <string name="save_term">Save Term</string>
     <string name="view_all_terms">View All Terms</string>
     <string name="update_term">Update Term</string>
+    <string name="enter_name_of_course">Enter Name of Course</string>
 </resources>

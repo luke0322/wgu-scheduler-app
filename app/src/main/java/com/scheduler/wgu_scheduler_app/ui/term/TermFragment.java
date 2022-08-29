@@ -2,8 +2,6 @@ package com.scheduler.wgu_scheduler_app.ui.term;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,14 +10,11 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,11 +22,7 @@ import com.scheduler.wgu_scheduler_app.R;
 import com.scheduler.wgu_scheduler_app.db.Result;
 import com.scheduler.wgu_scheduler_app.db.entity.TermEntity;
 import com.scheduler.wgu_scheduler_app.ui.activities.MainActivity;
-import com.scheduler.wgu_scheduler_app.ui.activities.TermActivity;
-import com.scheduler.wgu_scheduler_app.ui.main.MainFragment;
 import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
-
-import java.util.Calendar;
 
 public class TermFragment extends Fragment {
 
@@ -100,9 +91,9 @@ public class TermFragment extends Fragment {
 
         saveTermButton = getActivity().findViewById(R.id.save_term_button);
         saveTermButton.setOnClickListener(v -> {
-            if (termName.getText() != null &&
-                    startDate.getText() != null &&
-                    endDate.getText() != null) {
+            if (Utils.isNotBlank(termName.getText()) &&
+                    Utils.isNotBlank(startDate.getText()) &&
+                    Utils.isNotBlank(endDate.getText())) {
                     mViewModel.insert(new TermEntity(
                         termName.getText().toString(),
                         startDate.getText().toString(),
@@ -114,6 +105,9 @@ public class TermFragment extends Fragment {
                         Toast.makeText(getContext(), "FAIL", Toast.LENGTH_SHORT).show();
                     }
                 }, handler);
+            }
+            else {
+                Toast.makeText(getContext(), "One of the fields was blank!", Toast.LENGTH_SHORT).show();
             }
         });
     }

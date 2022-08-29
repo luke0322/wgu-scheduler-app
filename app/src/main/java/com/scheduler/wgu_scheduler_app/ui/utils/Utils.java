@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -15,6 +17,7 @@ import java.util.Calendar;
 
 public class Utils {
 
+    public static int CurrentTermId = 0;
     /**
      * Generic activity switcher.
      * @param cls the activity to start
@@ -44,7 +47,7 @@ public class Utils {
         int year = calendar.get(Calendar.YEAR);
 
         DatePickerDialog dpDialog = new DatePickerDialog(context,
-                (DatePickerDialog.OnDateSetListener) (view, yearL, monthOfYear, dayOfMonth) ->
+                (view, yearL, monthOfYear, dayOfMonth) ->
                         date.setText((monthOfYear + 1) + "-" + dayOfMonth + "-" + yearL), year, month, day);
         dpDialog.show();
     }
@@ -65,5 +68,23 @@ public class Utils {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
+    }
+
+    public static boolean isNotBlank(String string){
+        return string != null && !string.trim().isEmpty();
+    }
+
+    public static boolean isNotBlank(Editable editable){
+        if (editable != null) {
+            return editable.toString() != null && !editable.toString().trim().isEmpty();
+        }
+        return false;
+    }
+
+    public static String getEditTextToString(EditText editText){
+        if (null != editText && isNotBlank(editText.getText())){
+            return editText.getText().toString();
+        }
+        return "";
     }
 }
