@@ -89,6 +89,17 @@
         app:layout_constraintStart_toEndOf="@+id/editTextEmailAddresses"
         app:layout_constraintTop_toBottomOf="@+id/editTextInstructorNames" />
 
+    <Button
+        android:id="@+id/share_note_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share Notes"
+        app:layout_constraintBottom_toTopOf="@+id/save_course_button"
+        app:layout_constraintEnd_toStartOf="@+id/editTextOptionalNote"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStartDate" />
+
     <EditText
         android:id="@+id/editTextOptionalNote"
         android:layout_width="wrap_content"
@@ -96,11 +107,11 @@
         android:ems="10"
         android:hint="Optional Note"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/save_course_button"
+        app:layout_constraintBottom_toTopOf="@+id/delete_course_button"
         app:layout_constraintEnd_toStartOf="@+id/spinner"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextStartDate" />
+        app:layout_constraintStart_toEndOf="@+id/share_note_button"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEndDate" />
 
     <Spinner
         android:id="@+id/spinner"

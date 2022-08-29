@@ -2,6 +2,9 @@ package com.scheduler.wgu_scheduler_app.ui.course;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -43,6 +46,7 @@ public class CourseDetailFragment extends Fragment {
     private EditText phoneNumbers;
     private EditText startDate;
     private EditText endDate;
+    private Button shareNotesButton;
     private EditText optionalNote;
     private Spinner courseStatus;
     private Button deleteCourseButton;
@@ -103,6 +107,27 @@ public class CourseDetailFragment extends Fragment {
             if (focused){
                 Utils.toggleSoftKeyboard(getActivity(), false);
                 Utils.showDatePicker(getContext(), endDate);
+            }
+        });
+
+        shareNotesButton = getActivity().findViewById(R.id.share_note_button);
+        shareNotesButton.setOnClickListener(l -> {
+            if (Utils.isNotBlank(optionalNote.getText())){
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("message/rfc822");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Sharing Notes To Friends");
+                intent.putExtra(Intent.EXTRA_TEXT, Utils.getEditTextToString(optionalNote));
+
+                try {
+                    startActivity(intent);
+                }
+                catch(ActivityNotFoundException ex){
+                    Toast.makeText(getContext(), "Application not found to send notes!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            else {
+                Toast.makeText(getContext(), "No notes to send!", Toast.LENGTH_SHORT).show();
             }
         });
 
