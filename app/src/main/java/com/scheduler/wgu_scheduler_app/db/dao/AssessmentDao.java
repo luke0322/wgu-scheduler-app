@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.scheduler.wgu_scheduler_app.db.entity.AssessmentEntity;
+import com.scheduler.wgu_scheduler_app.db.entity.CourseEntity;
 
 import java.util.List;
 
@@ -25,4 +26,10 @@ public interface AssessmentDao {
 
     @Query("SELECT * FROM assessment_tbl ORDER BY assessmentId ASC")
     List<AssessmentEntity> getAll();
+
+    @Query("SELECT * FROM assessment_tbl WHERE courseId = :courseId ORDER BY courseId ASC")
+    List<AssessmentEntity> getAllByCourseId(int courseId);
+
+    @Query("SELECT * FROM assessment_tbl WHERE assessmentId = :assessmentId")
+    AssessmentEntity getAssessmentById(int assessmentId);
 }

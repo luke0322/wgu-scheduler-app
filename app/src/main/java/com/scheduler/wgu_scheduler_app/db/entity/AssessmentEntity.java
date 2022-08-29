@@ -1,24 +1,35 @@
 package com.scheduler.wgu_scheduler_app.db.entity;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+
+import com.scheduler.wgu_scheduler_app.ui.course.CourseListFragment;
 
 /**
  *
  */
-@Entity(tableName = "assessment_tbl")
+@Entity(tableName = "assessment_tbl",
+        foreignKeys = @ForeignKey(
+                entity = CourseEntity.class,
+                parentColumns = "courseId",
+                childColumns = "courseId",
+                onDelete = ForeignKey.CASCADE
+        ))
 public class AssessmentEntity {
     @PrimaryKey(autoGenerate = true)
     private int assessmentId;
     private int courseId;
     private String assessmentName;
-    private String assessmentDate;
+    private String assessmentStartDate;
+    private String assessmentEndDate;
     private String assessmentType;
 
-    public AssessmentEntity(int courseId, String assessmentName, String assessmentDate, String assessmentType) {
+    public AssessmentEntity(int courseId, String assessmentName, String assessmentStartDate, String assessmentEndDate, String assessmentType) {
         this.courseId = courseId;
         this.assessmentName = assessmentName;
-        this.assessmentDate = assessmentDate;
+        this.assessmentStartDate = assessmentStartDate;
+        this.assessmentEndDate = assessmentEndDate;
         this.assessmentType = assessmentType;
     }
 
@@ -46,12 +57,20 @@ public class AssessmentEntity {
         this.assessmentName = assessmentName;
     }
 
-    public String getAssessmentDate() {
-        return assessmentDate;
+    public String getAssessmentStartDate() {
+        return assessmentStartDate;
     }
 
-    public void setAssessmentDate(String assessmentDate) {
-        this.assessmentDate = assessmentDate;
+    public void setAssessmentStartDate(String assessmentStartDate) {
+        this.assessmentStartDate = assessmentStartDate;
+    }
+
+    public String getAssessmentEndDate() {
+        return assessmentEndDate;
+    }
+
+    public void setAssessmentEndDate(String assessmentEndDate) {
+        this.assessmentEndDate = assessmentEndDate;
     }
 
     public String getAssessmentType() {
@@ -68,7 +87,7 @@ public class AssessmentEntity {
                 "assessmentId=" + assessmentId +
                 ", courseId=" + courseId +
                 ", assessmentName='" + assessmentName + '\'' +
-                ", assessmentDate='" + assessmentDate + '\'' +
+                ", assessmentDate='" + assessmentStartDate + '\'' +
                 ", assessmentType='" + assessmentType + '\'' +
                 '}';
     }

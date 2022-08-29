@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.assessment.AssessmentFragment">
+    tools:context=".ui.assessment.AssessmentDetailFragment">
 
     <EditText
         android:id="@+id/editTextName"
@@ -63,18 +63,18 @@
         android:id="@+id/save_assessment_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Assessment"
-        app:layout_constraintBottom_toTopOf="@+id/view_all_assessments_button"
+        android:text="Update Assessment"
+        app:layout_constraintBottom_toTopOf="@+id/delete_assessment_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEndDate" />
 
     <Button
-        android:id="@+id/view_all_assessments_button"
+        android:id="@+id/delete_assessment_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View All Assessments"
+        android:text="Delete Assessment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

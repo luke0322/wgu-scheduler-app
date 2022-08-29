@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.scheduler.wgu_scheduler_app.R;
 import com.scheduler.wgu_scheduler_app.db.Result;
 import com.scheduler.wgu_scheduler_app.db.entity.CourseEntity;
+import com.scheduler.wgu_scheduler_app.ui.activities.AssessmentActivity;
 import com.scheduler.wgu_scheduler_app.ui.activities.TermActivity;
 import com.scheduler.wgu_scheduler_app.ui.term.TermDetailFragment;
 import com.scheduler.wgu_scheduler_app.ui.term.TermFragment;
@@ -45,6 +46,7 @@ public class CourseDetailFragment extends Fragment {
     private Spinner courseStatus;
     private Button deleteCourseButton;
     private Button saveCourseButton;
+    private Button addAssessmentButton;
 
     private int courseId;
     private int termId;
@@ -210,6 +212,12 @@ public class CourseDetailFragment extends Fragment {
             else {
                 Toast.makeText(getContext(), "One of the fields was empty!", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        addAssessmentButton = getActivity().findViewById(R.id.add_assessment_button);
+        addAssessmentButton.setOnClickListener(l -> {
+            Utils.CurrentCourseId = courseId;
+            Utils.switchActivity(AssessmentActivity.class, getActivity());
         });
     }
 

@@ -105,11 +105,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update Course"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/delete_course_button"
+        app:layout_constraintBottom_toTopOf="@+id/add_assessment_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEndDate" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
     <Button
         android:id="@+id/delete_course_button"
@@ -119,7 +119,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/save_course_button"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEndDate" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_assessment_button" />
+
+    <Button
+        android:id="@+id/add_assessment_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Assessment"
+        app:layout_constraintBottom_toTopOf="@+id/delete_course_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/save_course_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

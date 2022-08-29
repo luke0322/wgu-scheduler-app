@@ -30,7 +30,7 @@ import com.scheduler.wgu_scheduler_app.ui.activities.TermActivity;
 import com.scheduler.wgu_scheduler_app.ui.course.CourseListFragment;
 import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
 
-public class AssessmentFragment extends Fragment {
+public class AssessmentDetailFragment extends Fragment {
 
     private AssessmentViewModel mViewModel;
     private Handler handler = new Handler();
@@ -39,17 +39,22 @@ public class AssessmentFragment extends Fragment {
     private EditText startDate;
     private EditText endDate;
     private Button saveAssessmentButton;
-    private Button viewAllAssessmentsButton;
+    private Button deleteAssessmentButton;
 
-    public static AssessmentFragment newInstance() {
-        return new AssessmentFragment();
+    private int assessmentId;
+    private int courseId;
+
+    public static AssessmentDetailFragment newInstance() {
+        return new AssessmentDetailFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.assessment_fragment, container, false);
+        courseId = getArguments().getInt("courseId");
+        assessmentId = getArguments().getInt("assessmentId");
+        return inflater.inflate(R.layout.assessment_detail_fragment, container, false);
     }
 
     @Override
@@ -64,7 +69,6 @@ public class AssessmentFragment extends Fragment {
         String[] items = new String[] {"Objective Assessment", "Performance Assessment"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, items);
         assessmentType.setAdapter(adapter);
-        assessmentType.setSelection(0);
 
         startDate = getActivity().findViewById(R.id.editTextStartDate);
         startDate.setInputType(InputType.TYPE_NULL);
@@ -100,13 +104,15 @@ public class AssessmentFragment extends Fragment {
                     Utils.isNotBlank(startDate.getText()) &&
                     Utils.isNotBlank(endDate.getText())) {
 
-                AssessmentEntity ae = new AssessmentEntity(Utils.CurrentCourseId,
-                                        Utils.getEditTextToString(title),
-                                        Utils.getEditTextToString(startDate),
-                                        Utils.getEditTextToString(endDate),
-                                        assessmentType.getSelectedItem().toString());
+                AssessmentEntity ae = new AssessmentEntity(courseId,
+                        Utils.getEditTextToString(title),
+                        Utils.getEditTextToString(startDate),
+                        Utils.getEditTextToString(endDate),
+                        assessmentType.getSelectedItem().toString());
 
-                mViewModel.insert(ae, getActivity().getApplication(), result -> {
+                ae.setAssessmentId(assessmentId);
+
+                mViewModel.update(ae, getActivity().getApplication(), result -> {
                     if (result instanceof Result.Success){
                         Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
                     }
@@ -120,16 +126,67 @@ public class AssessmentFragment extends Fragment {
             }
         });
 
-        viewAllAssessmentsButton = getActivity().findViewById(R.id.view_all_assessments_button);
-        viewAllAssessmentsButton.setOnClickListener(l -> {
-            Utils.switchFragment(getActivity(), R.id.container_assessment, AssessmentListFragment.newInstance());
+        deleteAssessmentButton = getActivity().findViewById(R.id.delete_assessment_button);
+        deleteAssessmentButton.setOnClickListener(l -> {
+
+            if (Utils.isNotBlank(title.getText()) &&
+                    Utils.isNotBlank(startDate.getText()) &&
+                    Utils.isNotBlank(endDate.getText())) {
+
+                AssessmentEntity ae = new AssessmentEntity(courseId,
+                        Utils.getEditTextToString(title),
+                        Utils.getEditTextToString(startDate),
+                        Utils.getEditTextToString(endDate),
+                        assessmentType.getSelectedItem().toString());
+
+                ae.setAssessmentId(assessmentId);
+
+                mViewModel.delete(ae, getActivity().getApplication(), result -> {
+                    if (result instanceof Result.Success){
+                        Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                        Utils.switchFragment(getActivity(), R.id.container_assessment, AssessmentListFragment.newInstance());
+                    }
+                    else {
+                        Toast.makeText(getContext(), "FAIL", Toast.LENGTH_SHORT).show();
+                    }
+                }, handler);
+            }
+            else {
+                Toast.makeText(getContext(), "One of the fields was empty!", Toast.LENGTH_SHORT).show();
+            }
+
         });
+
+        mViewModel.getAssessmentById(assessmentId, getActivity().getApplication(), result -> {
+            if (result instanceof Result.Success) {
+                AssessmentEntity assessment = (AssessmentEntity) ((Result.Success) result).data;
+                if (assessment != null){
+                    title.setText(assessment.getAssessmentName());
+                    startDate.setText(assessment.getAssessmentStartDate());
+                    endDate.setText(assessment.getAssessmentEndDate());
+
+                    switch(assessment.getAssessmentType()){
+                        case "Objective Assessment":
+                        default:
+                            assessmentType.setSelection(0, false);
+                            break;
+                        case "Performance Assessment":
+                            assessmentType.setSelection(1, false);
+                            break;
+                    }
+                }
+
+            }
+            else {
+                Toast.makeText(getContext(), "FAIL", Toast.LENGTH_SHORT).show();
+            }
+        }, handler);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Utils.switchActivity(CourseActivity.class, getActivity());
+            Utils.switchFragment(getActivity(), R.id.container_assessment, AssessmentListFragment.newInstance());
             return true;
         }
         return super.onOptionsItemSelected(item);
