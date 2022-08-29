@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -71,10 +72,36 @@ public class TermDetailFragment extends Fragment {
             startDate.setText(startDateInitialText);
         }
 
+        startDate.setInputType(InputType.TYPE_NULL);
+        startDate.setOnClickListener(l -> {
+            Utils.toggleSoftKeyboard(getActivity(), false);
+            Utils.showDatePicker(getContext(), startDate);
+        });
+
+        startDate.setOnFocusChangeListener((view, focused) -> {
+            if (focused){
+                Utils.toggleSoftKeyboard(getActivity(), false);
+                Utils.showDatePicker(getContext(), startDate);
+            }
+        });
+
         endDate = getActivity().findViewById(R.id.editTextEndDate);
         if (null != endDateInitialText){
             endDate.setText(endDateInitialText);
         }
+
+        endDate.setInputType(InputType.TYPE_NULL);
+        endDate.setOnClickListener(l -> {
+            Utils.toggleSoftKeyboard(getActivity(), false);
+            Utils.showDatePicker(getContext(), endDate);
+        });
+
+        endDate.setOnFocusChangeListener((view, focused) -> {
+            if (focused){
+                Utils.toggleSoftKeyboard(getActivity(), false);
+                Utils.showDatePicker(getContext(), endDate);
+            }
+        });
 
         saveTermButton = getActivity().findViewById(R.id.save_term_button);
         saveTermButton.setOnClickListener(v -> {
