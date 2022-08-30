@@ -14,3 +14,4 @@ More info from signing:
 - Signing key: key0, password: wgu123
 - Generated apk: app-debug.apk
 - Screenshots: signing-debug.PNG, signing-key.PNG
+- Storyboard: storyboard.png
