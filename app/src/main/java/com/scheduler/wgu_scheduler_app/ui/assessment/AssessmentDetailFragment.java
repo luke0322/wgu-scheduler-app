@@ -110,6 +110,8 @@ public class AssessmentDetailFragment extends Fragment {
                         Utils.getEditTextToString(endDate),
                         assessmentType.getSelectedItem().toString());
 
+                Utils.attemptSendReminder(2, getContext(), Utils.getEditTextToString(startDate), Utils.getEditTextToString(endDate), "assessment: " + Utils.getEditTextToString(title));
+
                 ae.setAssessmentId(assessmentId);
 
                 mViewModel.update(ae, getActivity().getApplication(), result -> {

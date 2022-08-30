@@ -17,8 +17,11 @@ public class ReminderReceiver extends BroadcastReceiver
     public void onReceive(Context context, Intent intent)
     {
         ++reminderId;
+        String title = Utils.getPreference(context, "title");
+        String body = Utils.getPreference(context, "body");
+
         NotificationUtils _notificationUtils = new NotificationUtils(context, Utils.CHANNEL_ID, Utils.CHANNEL_NAME);
-        NotificationCompat.Builder _builder = _notificationUtils.setNotification(Utils.notificationTitle, Utils.notificationBody);
+        NotificationCompat.Builder _builder = _notificationUtils.setNotification(title, body);
         _notificationUtils.getManager().notify(reminderId, _builder.build());
     }
 }

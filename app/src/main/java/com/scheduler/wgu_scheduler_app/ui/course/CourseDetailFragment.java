@@ -238,6 +238,8 @@ public class CourseDetailFragment extends Fragment {
                     ce.setCourseOptionalNote(Utils.getEditTextToString(optionalNote));
                 }
 
+                Utils.attemptSendReminder(2, getContext(), Utils.getEditTextToString(startDate), Utils.getEditTextToString(endDate), "course: " + Utils.getEditTextToString(courseName));
+
                 ce.setCourseId(courseId);
 
                 mViewModel.update(ce, getActivity().getApplication(), result -> {

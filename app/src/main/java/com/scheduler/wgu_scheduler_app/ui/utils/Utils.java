@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -13,15 +16,16 @@ import android.widget.EditText;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
 
     public static int CurrentTermId = 0;
     public static int CurrentCourseId = 0;
-
-    public static String notificationTitle = "";
-    public static String notificationBody = "";
 
     public static String CHANNEL_ID = "22";
     public static String CHANNEL_NAME = "Date Notification";
@@ -95,14 +99,57 @@ public class Utils {
         return "";
     }
 
-    public static void sendReminder(long timeInSeconds, Context context, String title, String body){
+    private static void sendReminder(long timeInSeconds, Context context, String title, String body){
 
-        notificationTitle = title;
-        notificationBody = body;
+        putPreference(context, "title", title);
+        putPreference(context, "body", body);
 
         NotificationUtils _notificationUtils = new NotificationUtils(context, Utils.CHANNEL_ID, Utils.CHANNEL_NAME);
         long _currentTime = System.currentTimeMillis();
         long _triggerReminder = _currentTime + timeInSeconds;
         _notificationUtils.setReminder(_triggerReminder);
+    }
+
+    private static void putPreference(Context context, String key, String value){
+        SharedPreferences prefs = context.getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE);
+        prefs.edit().putString(key, value).commit();
+    }
+
+    public static String getPreference(Context context, String key){
+        SharedPreferences prefs = context.getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE);
+        return prefs.getString(key, "");
+    }
+
+    private static boolean isTodaysDate(String date){
+        if (isNotBlank(date)){
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+            try {
+                Date date1 = sdf.parse(date);
+                return DateUtils.isToday(date1.getTime());
+            }
+            catch (ParseException pe){
+                pe.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static void attemptSendReminder(long timeInSeconds, Context context, String startDate, String endDate, String extra){
+        boolean isStartDateToday = isTodaysDate(startDate);
+        boolean isEndDateToday = isTodaysDate(endDate);
+
+        if (isStartDateToday && isEndDateToday){
+            sendReminder(timeInSeconds, context, "Dates", "Both start and end date for " + extra  + " is today!");
+            return;
+        }
+
+        if (isStartDateToday){
+            sendReminder(timeInSeconds, context, "Start Date", "Start date for " + extra  + " is today!");
+            return;
+        }
+
+        if (isEndDateToday){
+            sendReminder(timeInSeconds, context, "End Date", "End date for " + extra  + " is today!");
+        }
     }
 }

@@ -127,6 +127,8 @@ public class CourseFragment extends Fragment {
                     ce.setCourseOptionalNote(Utils.getEditTextToString(optionalNote));
                 }
 
+                Utils.attemptSendReminder(2, getContext(), Utils.getEditTextToString(startDate), Utils.getEditTextToString(endDate), "course: " + Utils.getEditTextToString(courseName));
+
                 mViewModel.insert(ce, getActivity().getApplication(), result -> {
                     if (result instanceof Result.Success){
                         Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
