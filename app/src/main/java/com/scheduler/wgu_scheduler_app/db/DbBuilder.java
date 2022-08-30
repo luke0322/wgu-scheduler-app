@@ -14,7 +14,7 @@ import com.scheduler.wgu_scheduler_app.db.entity.CourseEntity;
 import com.scheduler.wgu_scheduler_app.db.entity.TermEntity;
 
 @Database(entities = {AssessmentEntity.class, CourseEntity.class, TermEntity.class},
-          version = 9,
+          version = 10,
           exportSchema = false) // when you change the db, increment the version
 public abstract class DbBuilder extends RoomDatabase {
     public abstract AssessmentDao assessmentDao();
