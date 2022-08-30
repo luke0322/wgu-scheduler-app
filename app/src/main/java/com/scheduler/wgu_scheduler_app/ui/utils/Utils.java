@@ -19,6 +19,12 @@ public class Utils {
 
     public static int CurrentTermId = 0;
     public static int CurrentCourseId = 0;
+
+    public static String notificationTitle = "";
+    public static String notificationBody = "";
+
+    public static String CHANNEL_ID = "22";
+    public static String CHANNEL_NAME = "Date Notification";
     /**
      * Generic activity switcher.
      * @param cls the activity to start
@@ -87,5 +93,16 @@ public class Utils {
             return editText.getText().toString();
         }
         return "";
+    }
+
+    public static void sendReminder(long timeInSeconds, Context context, String title, String body){
+
+        notificationTitle = title;
+        notificationBody = body;
+
+        NotificationUtils _notificationUtils = new NotificationUtils(context, Utils.CHANNEL_ID, Utils.CHANNEL_NAME);
+        long _currentTime = System.currentTimeMillis();
+        long _triggerReminder = _currentTime + timeInSeconds;
+        _notificationUtils.setReminder(_triggerReminder);
     }
 }

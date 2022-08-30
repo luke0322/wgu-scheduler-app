@@ -29,6 +29,8 @@
         <activity android:name=".ui.activities.TermActivity"
             android:label="Term">
         </activity>
+
+        <receiver android:name=".ui.receiver.ReminderReceiver" />
     </application>
 
 </manifest>

@@ -46,6 +46,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Utils.sendReminder(3, getContext(), "This is the title", "this is the message");
     }
 
 }
