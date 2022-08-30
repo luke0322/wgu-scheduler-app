@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_launcher_foreground);
+        getSupportActionBar().setLogo(R.drawable.ic_baseline_sticky_note_2_24);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 }

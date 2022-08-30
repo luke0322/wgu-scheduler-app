@@ -5,11 +5,11 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.Wguschedulerapp">
         <activity android:name=".ui.activities.MainActivity"
-            android:label="Course Scheduling Application">
+            android:label="Course Scheduler">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
