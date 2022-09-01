@@ -114,12 +114,13 @@ public class CourseDetailFragment extends Fragment {
         shareNotesButton.setOnClickListener(l -> {
             if (Utils.isNotBlank(optionalNote.getText())){
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("message/rfc822");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Sharing Notes To Friends");
+                intent.putExtra(Intent.EXTRA_TITLE, "Sharing Notes To Friends");
                 intent.putExtra(Intent.EXTRA_TEXT, Utils.getEditTextToString(optionalNote));
+                intent.setType("text/plain");
 
                 try {
-                    startActivity(intent);
+                    Intent chooserIntent = Intent.createChooser(intent, null);
+                    startActivity(chooserIntent);
                 }
                 catch(ActivityNotFoundException ex){
                     Toast.makeText(getContext(), "Application not found to send notes!", Toast.LENGTH_SHORT).show();
