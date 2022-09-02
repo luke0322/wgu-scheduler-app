@@ -63,6 +63,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailAddresses" />
 
+    <CheckBox
+        android:id="@+id/checboxStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notify Me"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/editTextStartDate"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.428" />
+
     <EditText
         android:id="@+id/editTextStartDate"
         android:layout_width="wrap_content"
@@ -72,9 +84,22 @@
         android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/editTextEndDate"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/checboxStart"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhoneNumbers" />
+
+    <CheckBox
+        android:id="@+id/checboxEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notify Me"
+        app:layout_constraintBottom_toTopOf="@+id/save_course_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/editTextEndDate"
+        app:layout_constraintTop_toBottomOf="@+id/checboxStart"
+        app:layout_constraintVertical_bias="0.096" />
 
     <EditText
         android:id="@+id/editTextEndDate"
@@ -85,6 +110,7 @@
         android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/editTextOptionalNote"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/checboxEnd"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextStartDate"

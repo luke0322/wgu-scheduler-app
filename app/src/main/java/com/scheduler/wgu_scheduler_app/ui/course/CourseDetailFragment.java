@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.scheduler.wgu_scheduler_app.ui.term.TermFragment;
 import com.scheduler.wgu_scheduler_app.ui.term.TermListFragment;
 import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
 
+import java.text.ParseException;
 import java.util.List;
 
 public class CourseDetailFragment extends Fragment {
@@ -52,6 +54,8 @@ public class CourseDetailFragment extends Fragment {
     private Button deleteCourseButton;
     private Button saveCourseButton;
     private Button addAssessmentButton;
+    private CheckBox checkBoxStart;
+    private CheckBox checkBoxEnd;
 
     private int courseId;
     private int termId;
@@ -239,7 +243,15 @@ public class CourseDetailFragment extends Fragment {
                     ce.setCourseOptionalNote(Utils.getEditTextToString(optionalNote));
                 }
 
-                Utils.attemptSendReminder(2, getContext(), Utils.getEditTextToString(startDate), Utils.getEditTextToString(endDate), "course: " + Utils.getEditTextToString(courseName));
+                if (checkBoxStart.isChecked()){
+                    Utils.scheduleNotification(Utils.getNotification("Course:" + courseName.getText().toString() + " start date is today!", "Course Notification", getContext()),
+                            Utils.getTimeFromDateString(Utils.getEditTextToString(startDate)), getContext(), 5);
+                }
+
+                if (checkBoxEnd.isChecked()){
+                    Utils.scheduleNotification(Utils.getNotification("Course:" + courseName.getText().toString() + " end date is today!", "Course Notification", getContext()),
+                            Utils.getTimeFromDateString(Utils.getEditTextToString(endDate)), getContext(), 6);
+                }
 
                 ce.setCourseId(courseId);
 
@@ -263,6 +275,11 @@ public class CourseDetailFragment extends Fragment {
             Utils.CurrentCourseId = courseId;
             Utils.switchActivity(AssessmentActivity.class, getActivity());
         });
+
+        checkBoxStart = getActivity().findViewById(R.id.checboxStart);
+        checkBoxStart.setChecked(false);
+        checkBoxEnd = getActivity().findViewById(R.id.checboxEnd);
+        checkBoxEnd.setChecked(false);
     }
 
     @Override

@@ -1,27 +1,30 @@
 package com.scheduler.wgu_scheduler_app.ui.receiver;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.core.app.NotificationCompat;
-
-import com.scheduler.wgu_scheduler_app.ui.utils.NotificationUtils;
-import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
-
-public class ReminderReceiver extends BroadcastReceiver
-{
-    private int reminderId = 250;
+public class ReminderReceiver extends BroadcastReceiver {
+    public static String CHANNEL_ID = "22";
+    public static String CHANNEL_NAME = "Date Notification";
+    public static String NOTIFICATION = "notification";
+    public static String NOTIFICATION_ID = "notification-id";
 
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
-        ++reminderId;
-        String title = Utils.getPreference(context, "title");
-        String body = Utils.getPreference(context, "body");
-
-        NotificationUtils _notificationUtils = new NotificationUtils(context, Utils.CHANNEL_ID, Utils.CHANNEL_NAME);
-        NotificationCompat.Builder _builder = _notificationUtils.setNotification(title, body);
-        _notificationUtils.getManager().notify(reminderId, _builder.build());
+    public void onReceive(Context context, Intent intent) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = intent.getParcelableExtra(NOTIFICATION);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance);
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        int id = intent.getIntExtra(NOTIFICATION_ID, 0);
+        assert notificationManager != null;
+        notificationManager.notify(id, notification);
     }
 }

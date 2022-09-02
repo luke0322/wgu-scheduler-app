@@ -30,7 +30,14 @@
             android:label="Term">
         </activity>
 
-        <receiver android:name=".ui.receiver.ReminderReceiver" />
+        <receiver android:name=".ui.receiver.ReminderReceiver">
+            <intent-filter>
+                <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

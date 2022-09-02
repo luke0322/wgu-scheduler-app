@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -30,6 +31,8 @@ import com.scheduler.wgu_scheduler_app.ui.activities.TermActivity;
 import com.scheduler.wgu_scheduler_app.ui.course.CourseListFragment;
 import com.scheduler.wgu_scheduler_app.ui.utils.Utils;
 
+import java.text.ParseException;
+
 public class AssessmentDetailFragment extends Fragment {
 
     private AssessmentViewModel mViewModel;
@@ -40,6 +43,8 @@ public class AssessmentDetailFragment extends Fragment {
     private EditText endDate;
     private Button saveAssessmentButton;
     private Button deleteAssessmentButton;
+    private CheckBox checkBoxStart;
+    private CheckBox checkBoxEnd;
 
     private int assessmentId;
     private int courseId;
@@ -110,7 +115,15 @@ public class AssessmentDetailFragment extends Fragment {
                         Utils.getEditTextToString(endDate),
                         assessmentType.getSelectedItem().toString());
 
-                Utils.attemptSendReminder(2, getContext(), Utils.getEditTextToString(startDate), Utils.getEditTextToString(endDate), "assessment: " + Utils.getEditTextToString(title));
+                if (checkBoxStart.isChecked()){
+                    Utils.scheduleNotification(Utils.getNotification("Assessment:" + title.getText().toString() + " start date is today!", "Assessment Notification", getContext()),
+                                            Utils.getTimeFromDateString(Utils.getEditTextToString(startDate)), getContext(), 1);
+                }
+
+                if (checkBoxEnd.isChecked()){
+                    Utils.scheduleNotification(Utils.getNotification("Assessment:" + title.getText().toString() + " end date is today!", "Assessment Notification", getContext()),
+                            Utils.getTimeFromDateString(Utils.getEditTextToString(endDate)), getContext(), 2);
+                }
 
                 ae.setAssessmentId(assessmentId);
 
@@ -183,6 +196,11 @@ public class AssessmentDetailFragment extends Fragment {
                 Toast.makeText(getContext(), "FAIL", Toast.LENGTH_SHORT).show();
             }
         }, handler);
+
+        checkBoxStart = getActivity().findViewById(R.id.checboxStart);
+        checkBoxStart.setChecked(false);
+        checkBoxEnd = getActivity().findViewById(R.id.checboxEnd);
+        checkBoxEnd.setChecked(false);
     }
 
     @Override

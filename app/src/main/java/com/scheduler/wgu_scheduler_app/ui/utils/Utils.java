@@ -1,7 +1,10 @@
 package com.scheduler.wgu_scheduler_app.ui.utils;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +16,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+
+import com.scheduler.wgu_scheduler_app.R;
+import com.scheduler.wgu_scheduler_app.ui.receiver.ReminderReceiver;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,8 +34,6 @@ public class Utils {
     public static int CurrentTermId = 0;
     public static int CurrentCourseId = 0;
 
-    public static String CHANNEL_ID = "22";
-    public static String CHANNEL_NAME = "Date Notification";
     /**
      * Generic activity switcher.
      * @param cls the activity to start
@@ -99,27 +104,6 @@ public class Utils {
         return "";
     }
 
-    private static void sendReminder(long timeInSeconds, Context context, String title, String body){
-
-        putPreference(context, "title", title);
-        putPreference(context, "body", body);
-
-        NotificationUtils _notificationUtils = new NotificationUtils(context, Utils.CHANNEL_ID, Utils.CHANNEL_NAME);
-        long _currentTime = System.currentTimeMillis();
-        long _triggerReminder = _currentTime + timeInSeconds;
-        _notificationUtils.setReminder(_triggerReminder);
-    }
-
-    private static void putPreference(Context context, String key, String value){
-        SharedPreferences prefs = context.getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE);
-        prefs.edit().putString(key, value).commit();
-    }
-
-    public static String getPreference(Context context, String key){
-        SharedPreferences prefs = context.getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE);
-        return prefs.getString(key, "");
-    }
-
     private static boolean isTodaysDate(String date){
         if (isNotBlank(date)){
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
@@ -134,22 +118,42 @@ public class Utils {
         return false;
     }
 
-    public static void attemptSendReminder(long timeInSeconds, Context context, String startDate, String endDate, String extra){
-        boolean isStartDateToday = isTodaysDate(startDate);
-        boolean isEndDateToday = isTodaysDate(endDate);
 
-        if (isStartDateToday && isEndDateToday){
-            sendReminder(timeInSeconds, context, "Dates", "Both start and end date for " + extra  + " is today!");
-            return;
+    public static long getTimeFromDateString(String date){
+        if (isTodaysDate(date)) return 0;
+
+        if (isNotBlank(date)){
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+            try {
+                Date date1 = sdf.parse(date);
+                Log.d("UTILSSS", "Date is: " + date1);
+                return date1.getTime();
+            }
+            catch (ParseException pe){
+                pe.printStackTrace();
+            }
         }
 
-        if (isStartDateToday){
-            sendReminder(timeInSeconds, context, "Start Date", "Start date for " + extra  + " is today!");
-            return;
-        }
+        return 0;
+    }
 
-        if (isEndDateToday){
-            sendReminder(timeInSeconds, context, "End Date", "End date for " + extra  + " is today!");
-        }
+    public static void scheduleNotification (Notification notification , long delay, Context context, int id) {
+        Intent notificationIntent = new Intent(context, ReminderReceiver.class ) ;
+        notificationIntent.putExtra(ReminderReceiver.NOTIFICATION_ID , id) ;
+        notificationIntent.putExtra(ReminderReceiver.NOTIFICATION , notification) ;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0 , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT ) ;
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE ) ;
+        assert alarmManager != null;
+        alarmManager.set(AlarmManager.RTC_WAKEUP , delay , pendingIntent) ;
+    }
+
+    public static Notification getNotification (String content, String title, Context context) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, ReminderReceiver.CHANNEL_ID);
+        builder.setContentTitle(title) ;
+        builder.setContentText(content) ;
+        builder.setSmallIcon(R.drawable.ic_action_profile);
+        builder.setAutoCancel( true ) ;
+        builder.setChannelId(ReminderReceiver.CHANNEL_ID) ;
+        return builder.build() ;
     }
 }
